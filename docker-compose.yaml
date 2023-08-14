@@ -43,7 +43,7 @@ services:
       - VERSION=docker
       - PLEX_CLAIM=claim--z84hm5ZjjKzN1wtbS6U
     volumes:
-      - ./config/plex:/config
+      - ./container-configs/plex:/config
       - media:/mnt/media
     devices:
       - /dev/dri/:/dev/dri/
@@ -62,7 +62,7 @@ services:
       - 8888:8888 # HTTP proxy
       - 8085:8085 # qbittorrent
     volumes:
-      - ./config/gluetun:/gluetun
+      - ./container-configs/gluetun:/gluetun
     environment:
       - VPN_SERVICE_PROVIDER=windscribe
       - VPN_TYPE=wireguard
@@ -84,7 +84,7 @@ services:
       - TZ=${TZ}
       - WEBUI_PORT=8085
     volumes:
-      - ./config/qbittorrent:/config
+      - ./container-configs/qbittorrent:/config
       - torrents:/mnt/torrents
     depends_on:
       - gluetun
@@ -100,7 +100,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ./config/prowlarr:/config
+      - ./container-configs/prowlarr:/config
       - rootmedia:/mnt
     ports:
       - 9696:9696
@@ -115,7 +115,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ./config/radarr:/config
+      - ./container-configs/radarr:/config
       - rootmedia:/mnt
     ports:
       - 7878:7878
@@ -130,7 +130,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ./config/sonarr:/config
+      - ./container-configs/sonarr:/config
       - rootmedia:/mnt
     ports:
       - 8989:8989
@@ -147,8 +147,8 @@ services:
       - '81:81'
       - '443:443'
     volumes:
-      - ./config/npm:/data
-      - ./config/letsencrypt:/etc/letsencrypt
+      - ./container-configs/npm:/data
+      - ./container-configs/letsencrypt:/etc/letsencrypt
   heimdall:
     image: lscr.io/linuxserver/heimdall:latest
     container_name: heimdall
@@ -159,7 +159,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ./config/heimdall:/config
+      - ./container-configs/heimdall:/config
     ports:
       - 8080:80
     restart: always

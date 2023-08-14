@@ -31,61 +31,6 @@ volumes:
       o: "addr=${NFS_SERVER},nfsvers=4"
       device: ":${NFS_SERVER_DATA_PATH}/torrents"
 
-  plex-config:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: "addr=${NFS_SERVER},nfsvers=4"
-      device: :${NFS_SERVER_CONF_PATH}/plex
-  gluetun-config:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: "addr=${NFS_SERVER},nfsvers=4"
-      device: :${NFS_SERVER_CONF_PATH}/gluetun
-  qbittorrent-config:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: "addr=${NFS_SERVER},nfsvers=4"
-      device: :${NFS_SERVER_CONF_PATH}/qbittorrent
-  prowlarr-config:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: "addr=${NFS_SERVER},nfsvers=4"
-      device: :${NFS_SERVER_CONF_PATH}/prowlarr
-  radarr-config:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: "addr=${NFS_SERVER},nfsvers=4"
-      device: :${NFS_SERVER_CONF_PATH}/radarr
-  sonarr-config:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: "addr=${NFS_SERVER},nfsvers=4"
-      device: :${NFS_SERVER_CONF_PATH}/sonarr
-  heimdall-config:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: "addr=${NFS_SERVER},nfsvers=4"
-      device: :${NFS_SERVER_CONF_PATH}/heimdall
-  npm-config:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: "addr=${NFS_SERVER},nfsvers=4"
-      device: :${NFS_SERVER_CONF_PATH}/npm
-  letsencrypt:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: "addr=${NFS_SERVER},nfsvers=4"
-      device: :${NFS_SERVER_CONF_PATH}/letsencrypt
-
 services:
   plex:
     image: lscr.io/linuxserver/plex:latest
@@ -96,9 +41,9 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
       - VERSION=docker
-      - PLEX_CLAIM=
+      - PLEX_CLAIM=claim--z84hm5ZjjKzN1wtbS6U
     volumes:
-      - plex-config:/config
+      - ./config/plex:/config
       - media:/mnt/media
     devices:
       - /dev/dri/:/dev/dri/
@@ -117,7 +62,7 @@ services:
       - 8888:8888 # HTTP proxy
       - 8085:8085 # qbittorrent
     volumes:
-      - gluetun-config:/gluetun
+      - ./config/gluetun:/gluetun
     environment:
       - VPN_SERVICE_PROVIDER=windscribe
       - VPN_TYPE=wireguard
@@ -139,7 +84,7 @@ services:
       - TZ=${TZ}
       - WEBUI_PORT=8085
     volumes:
-      - qbittorrent-config:/config
+      - ./config/qbittorrent:/config
       - torrents:/mnt/torrents
     depends_on:
       - gluetun
@@ -155,7 +100,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - prowlarr-config:/config
+      - ./config/prowlarr:/config
       - rootmedia:/mnt
     ports:
       - 9696:9696
@@ -170,7 +115,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - radarr-config:/config
+      - ./config/radarr:/config
       - rootmedia:/mnt
     ports:
       - 7878:7878
@@ -185,7 +130,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - sonarr-config:/config
+      - ./config/sonarr:/config
       - rootmedia:/mnt
     ports:
       - 8989:8989
@@ -202,8 +147,8 @@ services:
       - '81:81'
       - '443:443'
     volumes:
-      - npm-config:/data
-      - letsencrypt:/etc/letsencrypt
+      - ./config/npm:/data
+      - ./config/letsencrypt:/etc/letsencrypt
   heimdall:
     image: lscr.io/linuxserver/heimdall:latest
     container_name: heimdall
@@ -214,7 +159,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - heimdall-config:/config
+      - ./config/heimdall:/config
     ports:
       - 8080:80
     restart: always
@@ -223,4 +168,3 @@ services:
   #   image: registry.k8s.io/e2e-test-images/jessie-dnsutils:1.3
   #   container_name: dnsutils
   #   restart: unless-stopped
-

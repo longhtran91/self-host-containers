@@ -17,7 +17,7 @@ sudo mkdir ~./compose/container-configs
 
 echo >> "{PARTITION_NAME} {HOME}/compose/container-configs ext4 defaults 0 0"
 
-
+sudo systemctl enable iscsid
 
 
 sudo iscsiadm -m node -T {BASENAME}:{TARGETNAME} -p {IPADDRESS} -u #kill session

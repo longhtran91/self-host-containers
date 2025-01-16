@@ -8,6 +8,7 @@ sudo usermod -aG builtin_administrators "$USER"
 sudo apt update && sudo apt install open-iscsi
 sudo iscsiadm -m discovery -t sendtargets -p {IPADDRESS} #discover target
 sudo iscsiadm -m node -T {BASENAME}:{TARGETNAME} -p {IPADDRESS} -l #establish session
+sudo iscsiadm -m node -T {BASENAME}:{TARGETNAME} -p {IPADDRESS} --op update -n node.startup -v automatic #add target to auto startup
 
 sudo fdisk -l
 sudo fdisk {DISK} #e.g. /dev/sdb -> create partition
